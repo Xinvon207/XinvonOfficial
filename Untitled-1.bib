@@ -1,0 +1,435 @@
+ <style type="text/css">
+	/* Add your CSS code here.
+	
+	For example:
+	.example {
+		color: red;
+	}
+	
+	For brushing up on your CSS knowledge, check out http://www.w3schools.com/css/css_syntax.asp
+	
+	End of comment */ 
+	
+	
+	
+	/* Hide the footer at bottom of page. No longer displays powered by info */
+	.site-info.container {
+		display: none;
+	}
+	</style>
+	<!-- end Simple Custom CSS and JS -->
+	<!-- start Simple Custom CSS and JS -->
+	<!-- Add HTML code to the header or the footer.
+	
+	For example, you can use the following code for loading the jQuery library from Google CDN:
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	
+	or the following one for loading the Bootstrap library from MaxCDN:
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	
+	-- End of the comment --> 
+	
+	<!-- end Simple Custom CSS and JS -->
+	<script id="wpcp_disable_selection" type="text/javascript">
+	var image_save_msg='All images have Rights!';
+		var no_menu_msg='Scripts in Menu has Been banned!';
+		var smessage = " Dont use any of our Content!!";
+	
+	function disableEnterKey(e)
+	{
+		var elemtype = e.target.tagName;
+		
+		elemtype = elemtype.toUpperCase();
+		
+		if (elemtype == "TEXT" || elemtype == "TEXTAREA" || elemtype == "INPUT" || elemtype == "PASSWORD" || elemtype == "SELECT" || elemtype == "OPTION" || elemtype == "EMBED")
+		{
+			elemtype = 'TEXT';
+		}
+		
+		if (e.ctrlKey){
+		 var key;
+		 if(window.event)
+			  key = window.event.keyCode;     //IE
+		 else
+			  key = e.which;     //firefox (97)
+		//if (key != 17) alert(key);
+		 if (elemtype!= 'TEXT' && (key == 97 || key == 65 || key == 67 || key == 99 || key == 88 || key == 120 || key == 26 || key == 85  || key == 86 || key == 83 || key == 43 || key == 73))
+		 {
+			if(wccp_free_iscontenteditable(e)) return true;
+			show_wpcp_message('All content is COPYRIGHTED!');
+			return false;
+		 }else
+			 return true;
+		 }
+	}
+	
+	
+	/*For contenteditable tags*/
+	function wccp_free_iscontenteditable(e)
+	{
+		var e = e || window.event; // also there is no e.target property in IE. instead IE uses window.event.srcElement
+		  
+		var target = e.target || e.srcElement;
+	
+		var elemtype = e.target.nodeName;
+		
+		elemtype = elemtype.toUpperCase();
+		
+		var iscontenteditable = "false";
+			
+		if(typeof target.getAttribute!="undefined" ) iscontenteditable = target.getAttribute("contenteditable"); // Return true or false as string
+		
+		var iscontenteditable2 = false;
+		
+		if(typeof target.isContentEditable!="undefined" ) iscontenteditable2 = target.isContentEditable; // Return true or false as boolean
+	
+		if(target.parentElement.isContentEditable) iscontenteditable2 = true;
+		
+		if (iscontenteditable == "true" || iscontenteditable2 == true)
+		{
+			if(typeof target.style!="undefined" ) target.style.cursor = "text";
+			
+			return true;
+		}
+	}
+	
+	////////////////////////////////////
+	function disable_copy(e)
+	{	
+		var e = e || window.event; // also there is no e.target property in IE. instead IE uses window.event.srcElement
+		
+		var elemtype = e.target.tagName;
+		
+		elemtype = elemtype.toUpperCase();
+		
+		if (elemtype == "TEXT" || elemtype == "TEXTAREA" || elemtype == "INPUT" || elemtype == "PASSWORD" || elemtype == "SELECT" || elemtype == "OPTION" || elemtype == "EMBED")
+		{
+			elemtype = 'TEXT';
+		}
+		
+		if(wccp_free_iscontenteditable(e)) return true;
+		
+		var isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
+		
+		var checker_IMG = '';
+		if (elemtype == "IMG" && checker_IMG == 'checked' && e.detail >= 2) {show_wpcp_message(alertMsg_IMG);return false;}
+		if (elemtype != "TEXT")
+		{
+			if (smessage !== "" && e.detail == 2)
+				show_wpcp_message(smessage);
+			
+			if (isSafari)
+				return true;
+			else
+				return false;
+		}	
+	}
+	
+	//////////////////////////////////////////
+	function disable_copy_ie()
+	{
+		var e = e || window.event;
+		var elemtype = window.event.srcElement.nodeName;
+		elemtype = elemtype.toUpperCase();
+		if(wccp_free_iscontenteditable(e)) return true;
+		if (elemtype == "IMG") {show_wpcp_message(alertMsg_IMG);return false;}
+		if (elemtype != "TEXT" && elemtype != "TEXTAREA" && elemtype != "INPUT" && elemtype != "PASSWORD" && elemtype != "SELECT" && elemtype != "OPTION" && elemtype != "EMBED")
+		{
+			return false;
+		}
+	}	
+	function reEnable()
+	{
+		return true;
+	}
+	document.onkeydown = disableEnterKey;
+	document.onselectstart = disable_copy_ie;
+	if(navigator.userAgent.indexOf('MSIE')==-1)
+	{
+		document.onmousedown = disable_copy;
+		document.onclick = reEnable;
+	}
+	function disableSelection(target)
+	{
+		//For IE This code will work
+		if (typeof target.onselectstart!="undefined")
+		target.onselectstart = disable_copy_ie;
+		
+		//For Firefox This code will work
+		else if (typeof target.style.MozUserSelect!="undefined")
+		{target.style.MozUserSelect="none";}
+		
+		//All other  (ie: Opera) This code will work
+		else
+		target.onmousedown=function(){return false}
+		target.style.cursor = "default";
+	}
+	//Calling the JS function directly just after body load
+	window.onload = function(){disableSelection(document.body);};
+	
+	//////////////////special for safari Start////////////////
+	var onlongtouch;
+	var timer;
+	var touchduration = 1000; //length of time we want the user to touch before we do something
+	
+	var elemtype = "";
+	function touchstart(e) {
+		var e = e || window.event;
+	  // also there is no e.target property in IE.
+	  // instead IE uses window.event.srcElement
+		  var target = e.target || e.srcElement;
+		
+		elemtype = window.event.srcElement.nodeName;
+		
+		elemtype = elemtype.toUpperCase();
+		
+		if(!wccp_pro_is_passive()) e.preventDefault();
+		if (!timer) {
+			timer = setTimeout(onlongtouch, touchduration);
+		}
+	}
+	
+	function touchend() {
+		//stops short touches from firing the event
+		if (timer) {
+			clearTimeout(timer);
+			timer = null;
+		}
+		onlongtouch();
+	}
+	
+	onlongtouch = function(e) { //this will clear the current selection if anything selected
+		
+		if (elemtype != "TEXT" && elemtype != "TEXTAREA" && elemtype != "INPUT" && elemtype != "PASSWORD" && elemtype != "SELECT" && elemtype != "EMBED" && elemtype != "OPTION")	
+		{
+			if (window.getSelection) {
+				if (window.getSelection().empty) {  // Chrome
+				window.getSelection().empty();
+				} else if (window.getSelection().removeAllRanges) {  // Firefox
+				window.getSelection().removeAllRanges();
+				}
+			} else if (document.selection) {  // IE?
+				document.selection.empty();
+			}
+			return false;
+		}
+	};
+	
+	document.addEventListener("DOMContentLoaded", function(event) { 
+		window.addEventListener("touchstart", touchstart, false);
+		window.addEventListener("touchend", touchend, false);
+	});
+	
+	function wccp_pro_is_passive() {
+	
+	  var cold = false,
+	  hike = function() {};
+	
+	  try {
+		  const object1 = {};
+	  var aid = Object.defineProperty(object1, 'passive', {
+	  get() {cold = true}
+	  });
+	  window.addEventListener('test', hike, aid);
+	  window.removeEventListener('test', hike, aid);
+	  } catch (e) {}
+	
+	  return cold;
+	}
+	/*special for safari End*/
+	</script>
+	<script id="wpcp_disable_Right_Click" type="text/javascript">
+	document.ondragstart = function() { return false;}
+		function nocontext(e) {
+		   return false;
+		}
+		document.oncontextmenu = nocontext;
+	</script>
+	<style>
+	.unselectable
+	{
+
+	cursor: default;
+	}
+	html
+	{
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-tap-highlight-color: rgb(0, 0, 0);
+	}
+	</style>
+	<script id="wpcp_css_disable_selection" type="text/javascript">
+	var e = document.getElementsByTagName('body')[0];
+	if(e)
+	{
+		e.setAttribute('unselectable',"on");
+	}
+	</script>
+		<style>img#wpstats{display:none}</style>
+			<link rel="preconnect" href="//fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>	<noscript><style>.woocommerce-product-gallery{ opacity: 1 !important; }</style></noscript>
+		<meta name="generator" content="Elementor 3.11.5; settings: css_print_method-external, google_font-enabled, font_display-auto">
+	
+	<!-- Jetpack Open Graph Tags -->
+	<style id="sccss">.footer-widgets {
+		padding: 30px 0;
+	  color: white;
+	}
+	
+	.content-area {
+		width: 100% !important;
+	}
+	/*Color for header banner*/
+	.site-header {
+	background-color: rgba(39,67,255,1.0)
+	!important;
+	} 
+	/*Font size for footer*/
+	.footer-widgets {
+		  font-size: 30px;
+		}
+	
+		.footer-widgets .widget-title {
+		  font-size: 30px;
+		}
+	/*Font Size for Copyright in footer */
+	.site-info.container {
+		font-size: 15px;
+	}
+	
+	/*Menu Font*/
+	#mainnav ul li a {
+		font-family: Arial, sans-serif !important;
+	}
+	
+	/*Change logo size for mobile */
+	@media only screen and (max-width:767px) {
+	
+	  .site-header img.site-logo {
+		max-height: 50px !important;
+	  }
+	}
+	
+	
+	/*Change menu location on mobile*/
+	@media only screen and (max-width:767px){
+			
+	  .header-wrap .container{
+		text-align: left;
+	  }
+	
+	  .header-wrap .btn-menu{
+		float: right;
+		margin-right: 20px;
+	  }  
+	
+	  .header-wrap .col-md-4 {
+		max-width: 90%;
+		position: relative;
+		z-index: 2;
+	  }
+	
+	  .header-wrap .col-md-8 {
+		margin-top: -68px;       
+	  }        
+	
+	  #mainnav-mobi {
+		top: 70px;
+	  }
+	}
+	/*Change main logo size*/
+	.site-logo {
+	  max-height: 50px;
+	}
+	
+	
+	
+	
+	
+	</style><style type="text/css" id="wp-custom-css">.woocommerce ul.products li.product .onsale {
+	 color: white;
+	 background-color: red;
+	}</style></head>
+	
+	<body class="page-template-default page page-id-1416 theme-sydney woocommerce-no-js unselectable menu-inline elementor-default elementor-kit-1393 elementor-page elementor-page-1416" >
+	
+	<span id="toptarget"></span>
+	
+	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-dark-grayscale"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 0.49803921568627" /><feFuncG type="table" tableValues="0 0.49803921568627" /><feFuncB type="table" tableValues="0 0.49803921568627" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-grayscale"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 1" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0 1" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-purple-yellow"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.54901960784314 0.98823529411765" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0.71764705882353 0.25490196078431" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-blue-red"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 1" /><feFuncG type="table" tableValues="0 0.27843137254902" /><feFuncB type="table" tableValues="0.5921568627451 0.27843137254902" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-midnight"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 0" /><feFuncG type="table" tableValues="0 0.64705882352941" /><feFuncB type="table" tableValues="0 1" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-magenta-yellow"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.78039215686275 1" /><feFuncG type="table" tableValues="0 0.94901960784314" /><feFuncB type="table" tableValues="0.35294117647059 0.47058823529412" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-purple-green"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.65098039215686 0.40392156862745" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0.44705882352941 0.4" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-blue-orange"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.098039215686275 1" /><feFuncG type="table" tableValues="0 0.66274509803922" /><feFuncB type="table" tableValues="0.84705882352941 0.41960784313725" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg>	<div class="preloader">
+			<div class="spinner">
+				<div class="pre-bounce1"></div>
+				<div class="pre-bounce2"></div>
+			</div>
+		</div>
+	</script>
+	<div id="wpcp-error-message" class="msgmsg-box-wpcp hideme"><span>error: </span>Content is protected !!</div>
+	<script>
+	var timeout_result;
+	function show_wpcp_message(smessage)
+	{
+		if (smessage !== "")
+			{
+			var smessage_text = '<span>Alert: </span>'+smessage;
+			document.getElementById("wpcp-error-message").innerHTML = smessage_text;
+			document.getElementById("wpcp-error-message").className = "msgmsg-box-wpcp warning-wpcp showme";
+			clearTimeout(timeout_result);
+			timeout_result = setTimeout(hide_message, 3000);
+			}
+	}
+	function hide_message()
+	{
+		document.getElementById("wpcp-error-message").className = "msgmsg-box-wpcp warning-wpcp hideme";
+	}
+	</script>
+		<style>
+	@media print {
+	body * {display: none !important;}
+		body:after {
+		content: "Disabled 139499482847575"; }
+	}
+	</style>
+		<style type="text/css">
+	#wpcp-error-message {
+	    direction: ltr;
+	    text-align: center;
+	    transition: opacity 900ms ease 0s;
+	    z-index: 99999999;
+	}
+	.hideme {
+    	opacity:0;
+    	visibility: hidden;
+	}
+	.showme {
+    	opacity:1;
+    	visibility: visible;
+	}
+	.msgmsg-box-wpcp {
+		border:1px solid #f5aca6;
+		border-radius: 10px;
+		color: #000000;
+		font-family: Tahoma;
+		font-size: 11px;
+		margin: 10px;
+		padding: 10px 36px;
+		position: fixed;
+		width: 255px;
+		top: 50%;
+  		left: 50%;
+  		margin-top: -10px;
+  		margin-left: -130px;
+  		-webkit-box-shadow: 0px 0px 34px 2px rgb(255, 0, 0);
+		-moz-box-shadow: 0px 0px 34px 2px rgb(255, 0, 0);
+		box-shadow: 0px 0px 34px 2px rgb(255, 0, 0);
+	}
+	.msgmsg-box-wpcp span {
+		font-weight:bold;
+		text-transform:uppercase;
+	}
+		.warning-wpcp {
+		background:#ffecec url("Donot.png") no-repeat 10px 50%;
+	}
+    
+</style>
